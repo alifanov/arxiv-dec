@@ -15,7 +15,7 @@ class App extends Component {
 
     componentWillMount = () => {
         let date = moment().subtract(1, 'days').format('YYYYMMDD');
-        axios.get('http://export.arxiv.org/api/query', {
+        axios.get('https://export.arxiv.org/api/query', {
             params: {
                 search_query: '(cat:cs.AI OR cat:stat.ML OR cat:cs.LG) AND lastUpdatedDate:[' + date + '0000 TO ' + date + '2359]',
                 max_results: 800
