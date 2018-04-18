@@ -25,3 +25,4 @@ yarn-error.log*
 Будет удалено public/
 Будет удалено src/
 Будет удалено yarn.lock
+/node_modules/
