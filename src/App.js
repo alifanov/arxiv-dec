@@ -13,7 +13,7 @@ class App extends Component {
         this.state = {articles: []};
     }
 
-    componentWillMount = () => {
+    loadArticles = () => {
         let date = moment().subtract(1, 'days').format('YYYYMMDD');
         axios.get('https://export.arxiv.org/api/query', {
             params: {
@@ -39,6 +39,10 @@ class App extends Component {
             .catch(err => console.log('Error: ', err))
     };
 
+    componentWillMount = () => {
+        this.loadArticles();
+    };
+
     render() {
         return (
             <div className="container">
@@ -53,7 +57,7 @@ class App extends Component {
                             Date: {moment(v.updated[0]).format("DD.MM.YYYY")}
                         </pre>
                         <a href={v.link[1]['$'].href} target='_blank'>
-                            <img src={pdfIcon} alt='pdf' />
+                            <img src={pdfIcon} alt='pdf'/>
                         </a>
                     </div>)
                 })}
