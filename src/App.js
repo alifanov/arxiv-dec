@@ -23,7 +23,7 @@ class App extends Component {
         if (!cats){
             cats = ['cs.AI', 'stat.ML', 'cs.LG'];
         }
-        else{
+        else {
             cats = JSON.parse(cats);
         }
         this.state = {
@@ -66,9 +66,13 @@ class App extends Component {
 
     loadArticles = () => {
         this.setState({loading: true});
+        let cats = this.getCategories();
+        if (cats.length > 0){
+            cats = '(' + cats + ') AND '
+        }
         axios.get('https://export.arxiv.org/api/query', {
             params: {
-                search_query: '(' + this.getCategories() + ') AND lastUpdatedDate:[' + this.getStartDate() + ' TO ' + this.getEndDate() + ']',
+                search_query: cats + 'lastUpdatedDate:[' + this.getStartDate() + ' TO ' + this.getEndDate() + ']',
                 max_results: 800,
                 sortBy: 'lastUpdatedDate',
                 sortOrder: 'descending'
@@ -98,7 +102,7 @@ class App extends Component {
     };
 
     getCategories = () => {
-        return this.state.cats.map(c => 'cat:' + c).reduce((prev, curr) => [prev, ' OR ', curr]);
+        return (this.state.cats.length > 0) ? this.state.cats.map(c => 'cat:' + c).reduce((prev, curr) => [prev, ' OR ', curr]): [];
     };
 
     getPeriodClass = (period) => {
@@ -160,7 +164,10 @@ class App extends Component {
                 </div>
 
                 <div className="info">
-                    {!this.state.loading && <h3>{dateText} articles for categories cs.AI, cs.LG, stat.ML</h3>}
+                    {!this.state.loading && <h3>{dateText} articles for
+                        {(this.state.cats.length > 0) ? this.state.cats.reduce((prev, curr) => [prev, ', ', curr]) : ' all '}
+                        categories
+                    </h3>}
                     {(this.state.loading) ? <div>Loading...</div> : <div>Total: {this.state.articles.length}</div>}
 
                 </div>
